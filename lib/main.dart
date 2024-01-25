@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import './models/user.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -19,14 +20,14 @@ class MainApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   // const HomePage({super.key});
 
-  List<Map<String, dynamic>> allUsers = [];
+  List<UserModel> allUsers = [];
 
   Future getUsers() async {
     try {
       var response = await http.get(Uri.parse('https://reqres.in/api/users'));
       List data = (jsonDecode(response.body) as Map<String, dynamic>)['data'];
       data.forEach((element) {
-        allUsers.add(element);
+        allUsers.add(UserModel.fromJson(element));
       });
       // print(response.body);
     } catch (e) {
@@ -54,10 +55,10 @@ class HomePage extends StatelessWidget {
                   itemBuilder: (context, index) => ListTile(
                     leading: CircleAvatar(
                       backgroundColor: Colors.black54,
-                      backgroundImage: NetworkImage(allUsers[index]['avatar']),
+                      backgroundImage: NetworkImage(allUsers[index].avatar),
                     ),
-                    title: Text("${allUsers[index]['first_name']}"),
-                    subtitle: Text("${allUsers[index]['email']}"),
+                    title: Text("${allUsers[index].firstName}"),
+                    subtitle: Text("${allUsers[index].email}"),
                   ),
                 );
               }
